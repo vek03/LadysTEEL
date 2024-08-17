@@ -26,14 +26,18 @@ class DenunciaController extends Controller
      */
     public function indexAcatadas(Request $request) : View
     {
-        Gate::authorize('attendant-actions', $request->user);
+        try{
+            Gate::authorize('attendant-actions', $request->user);
 
-        $reports = $this->report->where('status', 1)->where('id_attendant', Auth::user()->id)->get();
-
-        return view('atendente.acatadas', [
-            'reports' => $reports,
-        ]);
-        
+            $reports = $this->report->where('status', 1)->where('id_attendant', Auth::user()->id)->get();
+    
+            return view('atendente.acatadas', [
+                'reports' => $reports,
+            ]);
+        }
+        catch(\Exception $e){
+            return $e;
+        }
     }
 
     /**
